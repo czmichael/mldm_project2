@@ -3,6 +3,8 @@ import Constant as const
 import os
 import matplotlib.pyplot as plt
 from pandas.plotting import scatter_matrix
+from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import LabelBinarizer
 
 
 
@@ -122,7 +124,7 @@ class Part_I_Exploere(object):
         for key in total_count_by_appointment_month:
             no_show_ratio_by_appointment_month[key] = float(no_show_count_by_appointment_month[key])/total_count_by_appointment_month[key]
         
-        fig, axes = plt.subplots(nrows=5, ncols=2)
+        fig, axes = plt.subplots(nrows=4, ncols=2)
 
         
         age_list = pd.DataFrame({
@@ -166,14 +168,22 @@ class Part_I_Exploere(object):
         appointment_month_list.plot(ax=axes[3,1], kind='bar')        
         
         plt.suptitle('no show ratio')
-        plt.show()
+        #plt.show()
                 
                 
                 
                 
                 
-
-                
+    def preprocess(self, df):
+        le_neib = LabelEncoder()
+        df["neighbourhood_code"] = le_neib.fit_transform(df["neighbourhood"])
+        print(df.dtypes)
+       
+        lb_gender = LabelBinarizer()
+        lb_results = lb_gender.fit_transform(df["gender"])
+        
+        df['is_male'] = lb_results        
+        print(df)
                 
                 
 # ============== Main =========================
@@ -186,5 +196,6 @@ train_data.drop(train_data.columns[[0]], axis=1, inplace=True)
 
 print(train_data)
 exploerer.plot_no_show_against_others(train_data)
+exploerer.preprocess(train_data)
 
 

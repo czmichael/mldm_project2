@@ -4,11 +4,11 @@ import os
 import time
 import matplotlib.pyplot as plt
 from sklearn.model_selection import StratifiedShuffleSplit
+from sklearn.preprocessing import LabelEncoder
 import Constant as const
 
 
 class DataUtil(object):
-
 
     
     def load_data(self, data_path = const.DATA_PATH):
