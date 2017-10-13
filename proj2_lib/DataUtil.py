@@ -17,29 +17,54 @@ class DataUtil(object):
         return pd.read_csv(csv_path, na_values=na_values, dtype={'Age': int, 'PatientId': str, 'AppointmentID': str})
     
     def clean_data(self, data):
+        scheduled_month_list = []
+        scheduled_hour_list = []
+        appointment_month_list = []
+        appointment_hour_list = []
+        
+        
         for index, row in data.iterrows():
             gender = row['Gender']
             if gender != 'F' and gender != 'M':
                 print('error')
-            '''
+            
             scheduled_day = row['ScheduledDay'] 
-            scheduled_date = time.strptime(scheduled_day, "%Y-%m-%dT%H:%M:%SZ")
-            data.set_value(index, 'ScheduledDay', time.strftime("%Y-%m-%d %H:%M:%S", scheduled_date))
+            scheduled_day_obj = time.strptime(scheduled_day, "%Y-%m-%dT%H:%M:%SZ")
+            scheduled_month = time.strftime("%m", scheduled_day_obj)
+            scheduled_month_list.append(scheduled_month)
+            scheduled_hour = time.strftime("%H", scheduled_day_obj)
+            scheduled_hour_list.append(scheduled_hour)
+            data.set_value(index, 'ScheduledDay', time.strftime("%Y-%m-%d %H:%M:%S", scheduled_day_obj))
             
             appointment_day = row['AppointmentDay'] 
-            appointment_date = time.strptime(scheduled_day, "%Y-%m-%dT%H:%M:%SZ")
-            data.set_value(index, 'AppointmentDay', time.strftime("%Y-%m-%d %H:%M:%S", scheduled_date))
-            '''
-                
+            appointment_day_obj = time.strptime(scheduled_day, "%Y-%m-%dT%H:%M:%SZ")
+            appointment_month = time.strftime("%m", appointment_day_obj)
+            appointment_month_list.append(appointment_month)
+            appointment_hour = time.strftime("%H", appointment_day_obj)
+            appointment_hour_list.append(appointment_hour)
+            data.set_value(index, 'AppointmentDay', time.strftime("%Y-%m-%d %H:%M:%S", appointment_day_obj))
+            
+            
+                            
             age = row['Age']
             if age < 0 or age > 200:
                 data.set_value(index, 'Age', -1)
                 
-        data.columns = ['patient_id', 'appointment_id', 'gender', 'scheduled_day', 'appointment_day', 'age', 'neighbourhood', 'scholarship', 
+
+        data.columns = ['patient_id', 'appointment_id', 'gender', 'scheduled_day',  
+                        'appointment_day', 'age', 'neighbourhood', 'scholarship', 
+                        'hipertension', 'diabetes', 'alcoholism', 'handicap', 'sms_received', 'no_show']  
+        
+        data['scheduled_month'] = scheduled_month_list
+        data['scheduled_hour'] = scheduled_hour_list
+        data['appointment_month'] = appointment_month_list
+        data['appointment_hour'] = appointment_hour_list
+        '''
+        data.columns = ['patient_id', 'appointment_id', 'gender', 'scheduled_day',
+                        'appointment_day', 'appointment_month', 'appointment_hour', 'age', 'neighbourhood', 'scholarship', 
                         'hipertension', 'diabetes', 'alcoholism', 'handicap', 'sms_received', 'no_show']        
-        #print(data.describe())
-        #data.hist(bins=100, figsize=(20, 15))
-        #plt.show()
+        '''
+        print(data)
         
         return data        
      
