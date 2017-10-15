@@ -168,7 +168,7 @@ class Part_I_Exploere(object):
         appointment_month_list.plot(ax=axes[3,1], kind='bar')        
         
         plt.suptitle('no show ratio')
-        #plt.show()
+        plt.show()
                 
                 
                 
