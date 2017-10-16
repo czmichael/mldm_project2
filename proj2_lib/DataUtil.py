@@ -5,13 +5,14 @@ import time
 import matplotlib.pyplot as plt
 from sklearn.model_selection import StratifiedShuffleSplit
 from sklearn.preprocessing import LabelEncoder
-import Constant as const
 
 
 class DataUtil(object):
 
+    DATA_PATH = "../data/"
+    PROCESSED_DATA_PATH = "../processed_data/"
     
-    def load_data(self, data_path = const.DATA_PATH):
+    def load_data(self, data_path = DATA_PATH):
         csv_path = os.path.join(data_path, "KaggleV2-May-2016.csv")
         na_values = ['N/A']
         return pd.read_csv(csv_path, na_values=na_values, dtype={'Age': int, 'PatientId': str, 'AppointmentID': str})
@@ -78,8 +79,8 @@ class DataUtil(object):
             test_set = data.loc[test_index]
         
         print(train_set)
-        train_set.to_csv(const.PROCESSED_DATA_PATH + 'train.csv')
-        test_set.to_csv(const.PROCESSED_DATA_PATH + 'test.csv')
+        train_set.to_csv(self.PROCESSED_DATA_PATH + 'train.csv')
+        test_set.to_csv(self.PROCESSED_DATA_PATH + 'test.csv')
         
         print(train_set["no_show"].value_counts() / len(train_set))      
         print(test_set["no_show"].value_counts() / len(test_set)) 

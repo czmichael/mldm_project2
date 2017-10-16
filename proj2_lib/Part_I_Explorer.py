@@ -1,5 +1,4 @@
 import pandas as pd
-import Constant as const
 import os
 import matplotlib.pyplot as plt
 from pandas.plotting import scatter_matrix
@@ -9,8 +8,11 @@ from sklearn.preprocessing import LabelBinarizer
 
 
 class Part_I_Exploere(object):
+    
+    DATA_PATH = "../data/"
+    PROCESSED_DATA_PATH = "../processed_data/"
 
-    def load_train_data(self, data_path = const.PROCESSED_DATA_PATH):
+    def load_train_data(self, data_path = PROCESSED_DATA_PATH):
         csv_path = os.path.join(data_path, "train.csv")
         na_values = ['N/A']
         return pd.read_csv(csv_path, na_values=na_values, dtype={'Age': int, 'PatientId': str, 'AppointmentID': str})
