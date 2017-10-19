@@ -75,8 +75,8 @@ df_mapper = DataFrameMapper([
 
 full_pipeline = FeatureUnion(transformer_list=[
     ('date_pipeline', date_pipeline),
-    ('num_mapper', num_mapper)
-    #('df_mapper', df_mapper)
+    ('num_mapper', num_mapper),
+    ('df_mapper', df_mapper)
 ])
 
 
@@ -84,15 +84,24 @@ clean_df = pd.read_csv(PROCESSED_DATA_DIR + "/train_set.csv", parse_dates=['Sche
                       dtype={'Age': np.float64})
 clean_df_labels = clean_df['No-show'].copy()
 clean_df = clean_df.drop('No-show', axis=1)
-print(clean_df.head())
+#print(clean_df.head())
 
 
 full_pipeline.fit(clean_df)
 appt_mat = full_pipeline.transform(clean_df)
 
 print(appt_mat[:5,:].toarray())
-
-
+print(appt_mat.shape)
+print(clean_df_labels[:5])
 # ==================================== Part 2 starts here ===========================================
+from sklearn import tree
+X = appt_mat
+Y = clean_df_labels
+clf = tree.DecisionTreeClassifier()
+clf = clf.fit(X, Y)
+
+
+
+
 
 
