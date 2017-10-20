@@ -95,10 +95,33 @@ print(appt_mat.shape)
 print(clean_df_labels[:5])
 # ==================================== Part 2 starts here ===========================================
 from sklearn import tree
+import numpy as np
+
+K = 6
+appt_array = appt_mat.toarray()
+for k in range(1, K):
+    train_mat = []
+    test_mat = []
+    for n in range(1, appt_mat.shape[0]):
+        if n % K != k - 1:
+            train_mat.append(appt_array[n])
+            #train_mat.append(n)
+        else:
+            test_mat.append(appt_array[n])
+            #test_mat.append(n)
+    #print(train_mat)
+    #print(test_mat)    
+    print("----- train shape: {}".format(np.shape(train_mat)))
+    print("----- test shape: {}".format(np.shape(test_mat)))   
+
+
+
+'''
 X = appt_mat
 Y = clean_df_labels
 clf = tree.DecisionTreeClassifier()
 clf = clf.fit(X, Y)
+'''
 
 
 
