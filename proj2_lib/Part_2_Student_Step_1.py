@@ -13,6 +13,32 @@ from sklearn.preprocessing import LabelBinarizer, OneHotEncoder, StandardScaler
 # install with pip install sklearn-pandas
 from sklearn_pandas import DataFrameMapper
 
+
+
+class YesNoTransform(TransformerMixin):
+    def fit(self, X, y=None):
+        return self
+    
+    def transform(self, X, y=None):
+        no_show = np.ndarray(shape=X.shape, dtype=int)
+        for index, rowdata in X.iterrows():
+            if any(rowdata == 'Yes'):
+                no_show[index] = 1
+            if any(rowdata == 'No'):
+                no_show[index] = -1
+        return no_show
+
+
+yes_no_mapper = DataFrameMapper([
+    (['No-show'], YesNoTransform())
+], input_df=True)
+    
+    
+no_show_pipeline = Pipeline([
+    ('yes_no_mapper', yes_no_mapper)
+])    
+
+
 class WeekdayTransform(TransformerMixin):
     def fit(self, X, y=None):
         return self
@@ -76,52 +102,29 @@ df_mapper = DataFrameMapper([
 full_pipeline = FeatureUnion(transformer_list=[
     ('date_pipeline', date_pipeline),
     ('num_mapper', num_mapper),
-    ('df_mapper', df_mapper)
+    ('df_mapper', df_mapper),
+    ('no_show_pipeline', no_show_pipeline)
 ])
 
 
 clean_df = pd.read_csv(PROCESSED_DATA_DIR + "/train_set.csv", parse_dates=['ScheduledDay','AppointmentDay'],
                       dtype={'Age': np.float64})
-clean_df_labels = clean_df['No-show'].copy()
-clean_df = clean_df.drop('No-show', axis=1)
+#clean_df_labels = clean_df['No-show'].copy()
+#clean_df = clean_df.drop('No-show', axis=1)
+
 #print(clean_df.head())
 
 
 full_pipeline.fit(clean_df)
 appt_mat = full_pipeline.transform(clean_df)
+print(type(appt_mat))
 
+appt_mat_df = pd.DataFrame(appt_mat.toarray())
+
+appt_mat_df.to_csv(PROCESSED_DATA_DIR + '/appt_mat.csv', index=False)
 print(appt_mat[:5,:].toarray())
 print(appt_mat.shape)
-print(clean_df_labels[:5])
-# ==================================== Part 2 starts here ===========================================
-from sklearn import tree
-import numpy as np
-
-K = 6
-appt_array = appt_mat.toarray()
-for k in range(1, K):
-    train_mat = []
-    test_mat = []
-    for n in range(1, appt_mat.shape[0]):
-        if n % K != k - 1:
-            train_mat.append(appt_array[n])
-            #train_mat.append(n)
-        else:
-            test_mat.append(appt_array[n])
-            #test_mat.append(n)
-    #print(train_mat)
-    #print(test_mat)    
-    print("----- train shape: {}".format(np.shape(train_mat)))
-    print("----- test shape: {}".format(np.shape(test_mat)))   
-
-
-
-'''
-X = appt_mat
-Y = clean_df_labels
-clf = tree.DecisionTreeClassifier()
-clf = clf.fit(X, Y)
-'''
+#print(clean_df_labels[:5])
 
 
 
