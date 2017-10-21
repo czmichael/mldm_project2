@@ -53,13 +53,6 @@ for k in range(1, K):
     test_label_df.to_csv(DATA_10_FOLD_DIR + '/test_label_' + str(k) + '.csv', index=False)    
     
     
-    
-    '''
-    X = train_mat
-    Y = train_mat_labels
-    clf = tree.DecisionTreeClassifier()
-    clf = clf.fit(X, Y)
-    '''
 
 
 
