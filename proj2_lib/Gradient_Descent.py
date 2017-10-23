@@ -10,7 +10,7 @@ class Gradient_Descent(object):
         self.w, self.b = self.calculate_gradient_descent(X, Y)
         
 
-    def calculate_gradient_descent(self, X, Y, num_iter=1500, _lambda=1, learn_rate=0.1):
+    def calculate_gradient_descent(self, X, Y, num_iter=200, _lambda=1, learn_rate=0.1):
         b = 0
         w = np.full((X.shape[1], 1), 0.0)
         
@@ -24,7 +24,7 @@ class Gradient_Descent(object):
             
             # Update b & w
             w = w - learn_rate * gradient_to_w
-            
+            print(k)
             #b = b - learn_rate * gradient_to_b
                 
         return w, b
