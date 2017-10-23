@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 from sklearn import tree
 from sklearn.metrics import roc_curve, auc
+from collections import Counter
 
 DATA_10_FOLD_DIR = '../data_10_fold'
 
@@ -28,7 +29,17 @@ for k in range(1, K):
     predicted = clf.predict(test_feature)
     actual = test_label.flatten()
     
+    print('predicted -->', Counter(predicted))
+    print('actual -->', Counter(actual))
+    print('equals -->', sum(np.array(predicted)==np.array(actual)))
+    
+    
     accuracy = sum(np.array(predicted)==np.array(actual))/float(len(actual))
+    
+    
+    
+    
+    
     fpr, tpr, thresholds = roc_curve(actual, predicted)
     roc_auc = auc(fpr, tpr)
     #print("K={}, accuracy={}, AUC={}".format(k, accuracy, roc_auc))
