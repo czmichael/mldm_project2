@@ -1,6 +1,5 @@
 import numpy as np
-from sklearn import metrics
-y = np.array([1, 1, 2, 2])
-pred = np.array([4, 4, 4, 4])
-fpr, tpr, thresholds = metrics.roc_curve(y, pred, pos_label=2)
-print(metrics.auc(fpr, tpr))
+vector1 = np.array([1, 2, 3])
+vector2 = np.array([4, 5, 6])
+
+print(vector1 + vector2)
