@@ -109,6 +109,7 @@ full_pipeline = FeatureUnion(transformer_list=[
 
 clean_df = pd.read_csv(PROCESSED_DATA_DIR + "/train_set.csv", parse_dates=['ScheduledDay','AppointmentDay'],
                       dtype={'Age': np.float64})
+print(clean_df['No-show'].value_counts())
 #clean_df_labels = clean_df['No-show'].copy()
 #clean_df = clean_df.drop('No-show', axis=1)
 

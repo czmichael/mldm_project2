@@ -1,14 +1,12 @@
 import pandas as pd
 import numpy as np
-from sklearn import tree
+from sklearn.svm import SVC
+from sklearn.datasets import make_classification
 from sklearn.metrics import roc_curve, auc
 
 DATA_10_FOLD_DIR = '../data_10_fold'
 
-
-
-
-
+    
 K = 11
 accuracy_total = 0
 roc_auc_total = 0
@@ -19,10 +17,9 @@ for k in range(1, K):
     test_feature = pd.read_csv(DATA_10_FOLD_DIR + '/test_feature_' + str(k) + '.csv').as_matrix()
     test_label = pd.read_csv(DATA_10_FOLD_DIR + '/test_label_' + str(k) + '.csv').as_matrix()
     
-    
     X = train_feature
     Y = train_label
-    clf = tree.DecisionTreeClassifier()
+    clf = SVC()
     clf = clf.fit(X, Y)
     
     predicted = clf.predict(test_feature)
@@ -31,7 +28,7 @@ for k in range(1, K):
     accuracy = sum(np.array(predicted)==np.array(actual))/float(len(actual))
     fpr, tpr, thresholds = roc_curve(actual, predicted)
     roc_auc = auc(fpr, tpr)
-    #print("K={}, accuracy={}, AUC={}".format(k, accuracy, roc_auc))
+    print("K={}, accuracy={}, AUC={}".format(k, accuracy, roc_auc))
 
     accuracy_total = accuracy_total + accuracy
     roc_auc_total = roc_auc_total + roc_auc
@@ -40,4 +37,4 @@ for k in range(1, K):
 accuracy_final = accuracy_total / 10
 roc_auc_final = roc_auc_total / 10
 
-print ("for decision tree, accuracy={}, AUC={}".format(accuracy_final, roc_auc_final))
+print ("for Linear SVM, accuracy={}, AUC={}".format(accuracy_final, roc_auc_final))
