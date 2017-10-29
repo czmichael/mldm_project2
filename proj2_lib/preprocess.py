@@ -5,7 +5,7 @@ from sklearn.pipeline import Pipeline, FeatureUnion
 from sklearn.preprocessing import OneHotEncoder, LabelBinarizer, StandardScaler
 
 from sklearn_pandas import DataFrameMapper
-import proj2_lib.util as utils
+import util as utils
 
 from sklearn.externals import joblib
 
